@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Ook! to bf (And Vice Versa) Translator</title>
+    <script type="text/javascript">
+      source = null;
+      lang = null;
+      function startUp() {
+	  source = document.getElementById("source");
+	  document.getElementById("lang").selectedIndex = 0;
+	  lang = null;
+      }
+      function option(e) {
+	  switch(e.selectedIndex) {
+	  case 1:
+	      lang = false;
+	      break;
+	  case 2:
+	      lang = true;
+	      break;
+	  default:
+	      lang = null;
+	  }
+      }
+      
+      function detectLang(text) {
+	  var result = text.match(/Ook/);
+	  if(result) {
+	      return true;
+	  } else {
+	      return false;
+	  }
+      }
+      function ookSplit(text) {
+	  return text.split(/\s+/);
+      }
+      function ookMatch(text) {
+	  switch(text) {
+	  case "Ook.Ook?":
+	      return ">";
+	  case "Ook?Ook.":
+	      return "<";
+	  case "Ook.Ook.":
+	      return "+";
+	  case "Ook!Ook!":
+	      return "-";
+	  case "Ook.Ook!":
+	      return ",";
+	  case "Ook!Ook.":
+	      return ".";
+	  case "Ook!Ook?":
+	      return "[";
+	  case "Ook?Ook!":
+	      return "]";
+	  default:
+	      return null;
+	  }
+      }
+      function ookTobf(text) {
+	  var src = ookSplit(text);
+	  var result = "";
+	  if(src.length < 1 || src.length % 2 != 0) {
+	      return "Error in source.";
+	  }
+	  else {
+	      for(var i=0;i < src.length;i+=2) {
+		  result += ookMatch(src[i] + src[i+1]);
+		  if (!result) {
+		      return "Error in source.";
+		  }
+	      }
+	      return result;
+	  }
+      }
+      function bfSplit(text) {
+	  return text.split("");
+      }
+      function bfMatch(text) {
+	  switch(text) {
+	  case ">":
+	      return "Ook. Ook? ";
+	  case "<":      
+	      return "Ook? Ook. ";
+	  case "+":
+	      return "Ook. Ook. ";
+	  case "-":
+	      return "Ook! Ook! ";
+	  case ",":
+	      return "Ook. Ook! ";
+	  case ".":
+	      return "Ook! Ook. ";
+	  case "[":
+	      return "Ook! Ook? ";
+	  case "]":
+	      return "Ook? Ook! ";
+	  default:
+	      return "";
+	  }
+      }
+      function bfToOok(text) {
+	  var src = bfSplit(text);
+	  var result = "";
+	  if(src.length < 1) {
+	      return "Error in source.";
+	  }
+	  else {
+	      for(var i = 0; i < src.length; i++) {
+		  result += bfMatch(src[i]);
+	      }
+	      return result.substring(0, result.length - 1);
+	  }
+      }
+      function mainfn() {
+	  if (lang === null) {
+	      lang = detectLang(source.value);
+	  }
+	  
+	  if (lang) {
+	      source.value = ookTobf(source.value);
+	  } else {
+	      source.value = bfToOok(source.value);
+	  }
+	  
+	  startUp();
+      }
+    </script>
+  </head>
+  <body onload="startUp()">
+    <h1>Ook! to bf (And Vice Versa) Translator</h1>
+    <p>
+      <form id="garage">
+	<textarea id="source" cols="80" rows="30"
+		  autofocus="true"
+		  required="true"
+		  placeholder="Enter code here.">
+	</textarea>
+	<br />
+	<button type="button" onclick="mainfn()">Translate</button>
+	<select id="lang" onchange="option(self)">
+	  <option value="detect" selected="selected">Detect</option>
+	  <option value="ook">Ook! to bf</option>	    
+	  <option value="bf">bf to Ook!</option>
+	</select>
+      </form>
+    </p>
+    <p>
+      <h3>Note:</h3>
+      <ul>
+	<li>The language is automatically detected. If this fails, this can be set manually.</li>
+	<li>Comments will be stripped from bf code.</li>
+	<li>Malformed Ook! code will result in an error.</li>
+      </ul>
+    </p>
+  </body>
+</html>
