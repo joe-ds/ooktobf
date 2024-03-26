@@ -2,7 +2,7 @@
 
 A translator to translate from bf to Ook! and vice-versa.
 
-See a version online [here](https://l3mu.gitlab.io/pages/181120_ooktobf.html).
+See a version online [here](https://joe-ds.github.io/ooktobf.html).
 
 ## Features
 *  Language autodetection
